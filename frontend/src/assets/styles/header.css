@@ -1,0 +1,19 @@
+.sign-in, .sign-in-cart{
+    color:white;
+    margin-left: 5px;
+}
+
+.brand:hover{
+    color: darkgray;
+}
+
+
+
+.sign-in:hover, .sign-in-cart:hover{
+    color: darkgray;
+}
+
+span{
+    font-size: 20px;
+    margin-left: 5px;
+}
