@@ -3,15 +3,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 import products from './data/products.js';
 
-
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 const app = express();
+
 
 app.get('/', (req, res) => {
     res.send('Server is ready');
 });
 
 app.get('/api/products', (req, res) => {
+    console.log('Request received at /api/products');
     res.json(products);
 });
 
