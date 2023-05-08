@@ -8,11 +8,15 @@
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
     "client": "npm start --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/seeders.js",
+    "data:destroy": "node backend/seeders.js --destroy"
   },
   "author": "Kenneth Quiggins",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
     "express": "^4.18.2",
     "mongoose": "^7.1.0",
     "vite": "^4.3.5"

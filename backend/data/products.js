@@ -1,6 +1,5 @@
 const products = [
   {
-    _id: '1',
     name: 'Raspberry Pi 4',
     image: '/images/pi4.jpg',
     description:
@@ -13,7 +12,7 @@ const products = [
     numReviews: 100,
   },
   {
-    _id: '2',
+
     name: 'Hak5 Rubber Ducky',
     image: '/images/hackingUsb.jpg',
     description:
@@ -26,7 +25,7 @@ const products = [
     numReviews: 80,
   },
   {
-    _id: '3',
+
     name: 'Alfa AWUS036NH',
     image: '/images/alpha.jpg',
     description:
@@ -39,7 +38,7 @@ const products = [
     numReviews: 120,
   },
   {
-    _id: '4',
+
     name: 'HackerBox Kits',
     image: '/images/boxSet.jpg',
     description:
@@ -52,7 +51,7 @@ const products = [
     numReviews: 120,
   },
   {
-    _id: '5',
+
     name: 'USB Killer',
     image: '/images/usbTool.jpg',
     description:
@@ -65,7 +64,7 @@ const products = [
     numReviews: 100,
   },
   {
-    _id: '6',
+  
     name: 'Kali Linux Revealed',
     image: '/images/kali.jpg',
     description:
