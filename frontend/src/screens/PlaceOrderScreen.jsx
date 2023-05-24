@@ -14,7 +14,7 @@ const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
 
-  const [createOrder, { isLoading, isError, error }] = useCreateOrderMutation();
+  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   useEffect(() => {
     if (!cart.shippingAddress.address) {
