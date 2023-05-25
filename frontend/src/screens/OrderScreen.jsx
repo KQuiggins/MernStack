@@ -67,6 +67,45 @@ const OrderScreen = () => {
     }
   }, [errorPayPal, loadingPayPal, paypal, paypalDispatch, order]);
 
+  async function onApproveTest() {
+    await payOrder({
+        orderId, details: { payer: {}}
+    });
+    refetch();
+    toast.success("Order has been paid");
+  }
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async function (details) {
+        try {
+            await payOrder({
+                orderId, details
+            });
+            refetch();
+            toast.success("Order has been paid");
+        } catch (error) {
+            toast.error(error?.data?.message || error.message);
+        }
+    });
+
+
+  }
+  function onError(error) {
+    toast.error(error.message);
+  }
+  function createOrder(data, actions) {
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: order.totalPrice,
+          },
+        },
+      ],
+    }).then((orderID) => {
+        return orderID;
+    })
+  }
+
 
   return isLoading ? (
     <Loader />
@@ -158,7 +197,30 @@ const OrderScreen = () => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {/* PAYORDER PLACEHOLDER */}
+              {!order.isPaid && (
+                <ListGroup.Item>
+                    {loadingPay && <Loader />}
+
+                    {isPending ? <Loader /> : (
+                        <div>
+                            <button onClick={onApproveTest} style={{marginBottom: '10px'}}>Test Pay Order</button>
+                            <div>
+                            <PayPalButtons
+
+                                createOrder={createOrder}
+                                onApprove={onApprove}
+                                onError={onError}
+                            >
+
+                            </PayPalButtons>
+                            </div>
+                        </div>
+
+
+
+                    )}
+                </ListGroup.Item>
+              )}
               {/* MARKED AS DELIVERED PLACEHOLDER */}
             </ListGroup>
           </Card>
