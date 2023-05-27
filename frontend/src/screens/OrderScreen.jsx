@@ -7,7 +7,7 @@ import {
   Image,
   Card,
   Button,
-  Form,
+
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -18,6 +18,7 @@ import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
   useGetPayPalClientIdQuery,
+  useDeliverOrderMutation,
 } from "../slices/ordersApiSlice";
 
 const OrderScreen = () => {
@@ -31,6 +32,8 @@ const OrderScreen = () => {
   } = useGetOrderDetailsQuery(orderId);
 
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+
+  const [deliverOrder, {isLoading: loadingDeliver}] = useDeliverOrderMutation();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -105,6 +108,16 @@ const OrderScreen = () => {
         return orderID;
     })
   }
+
+  const deliverOrderHandler = async () => {
+    try {
+      await deliverOrder(orderId);
+      refetch();
+      toast.success("Order has been delivered");
+    } catch (error) {
+      toast.error(error?.data?.message || error.message);
+    }
+  };
 
 
   return isLoading ? (
@@ -203,7 +216,7 @@ const OrderScreen = () => {
 
                     {isPending ? <Loader /> : (
                         <div>
-                            <button onClick={onApproveTest} style={{marginBottom: '10px'}}>Test Pay Order</button>
+                            <Button onClick={onApproveTest} style={{marginBottom: '10px'}}>Test Pay Order</Button>
                             <div>
                             <PayPalButtons
 
@@ -221,7 +234,14 @@ const OrderScreen = () => {
                     )}
                 </ListGroup.Item>
               )}
-              {/* MARKED AS DELIVERED PLACEHOLDER */}
+              {loadingDeliver && <Loader />}
+
+              {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                  <ListGroup.Item>
+                      <Button variant="dark" onClick={deliverOrderHandler}>Mark As Delivered</Button>
+                  </ListGroup.Item>
+
+              )}
             </ListGroup>
           </Card>
         </Col>
