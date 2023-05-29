@@ -10,6 +10,7 @@ import FormContainer from "../../components/FormContainer";
 import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
+  useUploadProductImageMutation,
 } from "../../slices/productsApiSlice";
 
 const ProductEditScreen = () => {
@@ -33,6 +34,23 @@ const ProductEditScreen = () => {
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
 
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+    useUploadProductImageMutation();
+
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (product) {
       setName(product.name);
@@ -45,29 +63,28 @@ const ProductEditScreen = () => {
     }
   }, [product]);
 
-    const submitHandler = async (e) => {
-        e.preventDefault();
-        const updatedProduct = {
-            productId,
-            name,
-            price,
-            image,
-            brand,
-            category,
-            countInStock,
-            description,
-        };
-
-        const result = await updateProduct(updatedProduct);
-        if (result.error) {
-            toast.error(result.error);
-        } else {
-            toast.success("Product Updated");
-            navigate("/admin/productlist");
-        }
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const updatedProduct = {
+      productId,
+      name,
+      price,
+      image,
+      brand,
+      category,
+      countInStock,
+      description,
     };
 
-  const navigate = useNavigate();
+    const result = await updateProduct(updatedProduct);
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      toast.success("Product Updated");
+      navigate("/admin/productlist");
+    }
+  };
+
   return (
     <>
       <Link to="/admin/productlist" className="btn btn-dark my-3">
@@ -103,7 +120,20 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
-            {/* Image input placeholder */}
+            <Form.Group controlId="image" className="my-2">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter image url"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              ></Form.Control>
+              <Form.Control
+                type="file"
+                label="Choose File"
+                onChange={uploadFileHandler}
+              ></Form.Control>
+            </Form.Group>
 
             <Form.Group controlId="brand" className="my-2">
               <Form.Label>Enter Brand</Form.Label>
