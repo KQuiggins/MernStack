@@ -3,29 +3,45 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { FcSupport, FcDeleteDatabase } from "react-icons/fc";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { useGetProductsQuery, useCreateProductMutation } from "../../slices/productsApiSlice";
+import {
+  useGetProductsQuery,
+  useCreateProductMutation,
+  useDeleteProductMutation,
+} from "../../slices/productsApiSlice";
+
 import { VscEdit } from "react-icons/vsc";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const ProductListScreen = () => {
   const { data: products, isLoading, error, refetch } = useGetProductsQuery();
 
-  const [createProduct, { isLoading: loadingCreateProduct }] = useCreateProductMutation();
+  const [createProduct, { isLoading: loadingCreateProduct }] =
+    useCreateProductMutation();
 
-  const deleteHandler = (id) => {
-    console.log(id);
+  const [deleteProduct, { isLoading: loadingDeleteProduct }] =
+    useDeleteProductMutation();
+
+  const deleteHandler = async (id) => {
+    if (window.confirm("Are you sure 🤔")) {
+      try {
+        await deleteProduct(id);
+        refetch();
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
+      }
+    }
   };
 
-    const createProductHandler = async () => {
-        if (window.confirm("Are you sure 🤔")) {
-            try {
-                await createProduct();
-                refetch();
-            } catch (error) {
-                toast.error(error?.data?.message || error.error);
-            }
-        }
-    };
+  const createProductHandler = async () => {
+    if (window.confirm("Are you sure 🤔")) {
+      try {
+        await createProduct();
+        refetch();
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
+      }
+    }
+  };
 
   return (
     <>
@@ -34,13 +50,16 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className="text-end">
-          <Button className="btn-sm m-3" onClick={createProductHandler} >
+          <Button className="btn-sm m-3" onClick={createProductHandler}>
             <FcSupport className="mx-2" />
             Create Product
           </Button>
         </Col>
       </Row>
+
       {loadingCreateProduct && <Loader />}
+      {loadingDeleteProduct && <Loader />}
+      
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -73,7 +92,11 @@ const ProductListScreen = () => {
                       </Button>
                     </LinkContainer>
                     <Button className="btn-sm" variant="danger">
-                        <FcDeleteDatabase onClick={() => {deleteHandler(product._id)}}/>
+                      <FcDeleteDatabase
+                        onClick={() => {
+                          deleteHandler(product._id);
+                        }}
+                      />
                     </Button>
                   </td>
                 </tr>
