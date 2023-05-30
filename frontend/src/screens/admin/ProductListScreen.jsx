@@ -25,6 +25,7 @@ const ProductListScreen = () => {
     if (window.confirm("Are you sure 🤔")) {
       try {
         await deleteProduct(id);
+        toast.success("Product Deleted");
         refetch();
       } catch (error) {
         toast.error(error?.data?.message || error.error);
@@ -59,7 +60,7 @@ const ProductListScreen = () => {
 
       {loadingCreateProduct && <Loader />}
       {loadingDeleteProduct && <Loader />}
-      
+
       {isLoading ? (
         <Loader />
       ) : error ? (
