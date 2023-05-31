@@ -84,7 +84,27 @@ const deleteProduct = asyncHandler(async (req, res) => {
     if (product) {
         await Product.deleteOne({_id: product._id});
         res.status(200).json({message: 'Product deleted successfully'});
-        
+
+    } else {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+
+});
+
+// @desc   Create a new review
+// @route  POST /api/products/:id/reviews
+// @access Private
+const createProductReview = asyncHandler(async (req, res) => {
+
+    const { rating, comment } = req.body;
+
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+        await Product.deleteOne({_id: product._id});
+        res.status(200).json({message: 'Product deleted successfully'});
+
     } else {
         res.status(404);
         throw new Error('Product not found');
