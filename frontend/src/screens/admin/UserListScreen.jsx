@@ -1,23 +1,37 @@
 import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button } from "react-bootstrap";
-import { useGetUsersQuery } from "../../slices/usersApiSlice";
+import {
+  useGetUsersQuery,
+  useDeleteUserMutation,
+} from "../../slices/usersApiSlice";
 import { FcBiohazard } from "react-icons/fc";
 import { TiUserDelete } from "react-icons/ti";
 import { VscEdit, VscTerminalLinux } from "react-icons/vsc";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
+import { toast } from "react-toastify";
 
 const UserListScreen = () => {
   const { data: users, isLoading, error, refetch } = useGetUsersQuery();
-  console.log(users);
+
+  const [deleteUser, { isLoading: loadingDelete }] = useDeleteUserMutation();
 
   const deleteHandler = async (id) => {
-    console.log("deleteHandler");
+    if (window.confirm("Are you sure 🤔")) {
+      try {
+        await deleteUser(id);
+        toast.success("User Deleted");
+        refetch();
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
+      }
+    }
   };
 
   return (
     <>
       <h1>Users</h1>
+      {loadingDelete && <Loader />}
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -51,8 +65,8 @@ const UserListScreen = () => {
                 </td>
 
                 <td>
-                  <LinkContainer to={`admin/user/${user._id}/edit`}>
-                    <Button className="btn-sm mx-2" variant="info">
+                  <LinkContainer to={`/admin/user/${user._id}/edit`}>
+                    <Button className="btn-sm m-2" variant="info">
                       <VscEdit />
                     </Button>
                   </LinkContainer>
@@ -68,14 +82,19 @@ const UserListScreen = () => {
             ))}
           </tbody>
           <tfoot>
-            <td>
-              <FcBiohazard style={{ color: "red", fontSize: "24px" }} /> = Not
-              Admin
-            </td>
-            <td>
-              <VscTerminalLinux style={{ color: "green", fontSize: "24px" }} />{" "}
-              Admin
-            </td>
+            <tr>
+              <td>
+                <VscTerminalLinux
+                  style={{ color: "green", fontSize: "24px" }}
+                />{" "}
+                Admin
+              </td>
+
+              <td>
+                <FcBiohazard style={{ color: "red", fontSize: "24px" }} /> = Not
+                Admin
+              </td>
+            </tr>
           </tfoot>
         </Table>
       )}
