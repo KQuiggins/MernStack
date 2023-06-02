@@ -23,7 +23,7 @@ import {
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-// import './assets/styles/bootstrap.custom.css'
+//import './assets/styles/bootstrap.custom.css'
 import App from "./App.jsx";
 import "./assets/styles/index.css";
 import OrderListScreen from "./screens/admin/OrderListScreen";
@@ -65,5 +65,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <RouterProvider router={router} />
       </PayPalScriptProvider>
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
