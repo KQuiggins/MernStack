@@ -10,7 +10,8 @@
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeders.js",
-    "data:destroy": "node backend/seeders.js --destroy"
+    "data:destroy": "node backend/seeders.js --destroy",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Kenneth Quiggins",
   "license": "MIT",
@@ -21,6 +22,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.1.0",
+    "multer": "^1.4.5-lts.1",
     "vite": "^4.3.5"
   },
   "devDependencies": {

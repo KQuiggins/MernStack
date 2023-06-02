@@ -1,31 +1,50 @@
 import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { FcSupport, FcDeleteDatabase } from "react-icons/fc";
+import { useParams } from "react-router-dom";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { useGetProductsQuery, useCreateProductMutation } from "../../slices/productsApiSlice";
+import {
+  useGetProductsQuery,
+  useCreateProductMutation,
+  useDeleteProductMutation,
+} from "../../slices/productsApiSlice";
+import Paginate from "../../components/Paginate";
 import { VscEdit } from "react-icons/vsc";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const ProductListScreen = () => {
-  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  const { pageNumber } = useParams();
+  const { data, isLoading, error, refetch } = useGetProductsQuery({pageNumber});
 
-  const [createProduct, { isLoading: loadingCreateProduct }] = useCreateProductMutation();
+  const [createProduct, { isLoading: loadingCreateProduct }] =
+    useCreateProductMutation();
 
-  const deleteHandler = (id) => {
-    console.log(id);
+  const [deleteProduct, { isLoading: loadingDeleteProduct }] =
+    useDeleteProductMutation();
+
+  const deleteHandler = async (id) => {
+    if (window.confirm("Are you sure 🤔")) {
+      try {
+        await deleteProduct(id);
+        toast.success("Product Deleted");
+        refetch();
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
+      }
+    }
   };
 
-    const createProductHandler = async () => {
-        if (window.confirm("Are you sure 🤔")) {
-            try {
-                await createProduct();
-                refetch();
-            } catch (error) {
-                toast.error(error?.data?.message || error.error);
-            }
-        }
-    };
+  const createProductHandler = async () => {
+    if (window.confirm("Are you sure 🤔")) {
+      try {
+        await createProduct();
+        refetch();
+      } catch (error) {
+        toast.error(error?.data?.message || error.error);
+      }
+    }
+  };
 
   return (
     <>
@@ -34,13 +53,16 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className="text-end">
-          <Button className="btn-sm m-3" onClick={createProductHandler} >
+          <Button className="btn-sm m-3" onClick={createProductHandler}>
             <FcSupport className="mx-2" />
             Create Product
           </Button>
         </Col>
       </Row>
+
       {loadingCreateProduct && <Loader />}
+      {loadingDeleteProduct && <Loader />}
+
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -59,7 +81,7 @@ const ProductListScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {data.products.map((product) => (
                 <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.name}</td>
@@ -73,13 +95,18 @@ const ProductListScreen = () => {
                       </Button>
                     </LinkContainer>
                     <Button className="btn-sm" variant="danger">
-                        <FcDeleteDatabase onClick={() => {deleteHandler(product._id)}}/>
+                      <FcDeleteDatabase
+                        onClick={() => {
+                          deleteHandler(product._id);
+                        }}
+                      />
                     </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </Table>
+          <Paginate pages={data.pages} page={data.page} isAdmin={true} />
         </>
       )}
     </>
