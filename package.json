@@ -10,7 +10,8 @@
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeders.js",
-    "data:destroy": "node backend/seeders.js --destroy"
+    "data:destroy": "node backend/seeders.js --destroy",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Kenneth Quiggins",
   "license": "MIT",
