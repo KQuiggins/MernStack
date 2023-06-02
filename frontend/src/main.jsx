@@ -1,4 +1,5 @@
 import React from "react";
+import {HelmetProvider} from "react-helmet-async";
 import ReactDOM from "react-dom/client";
 import HomeScreen from "./screens/HomeScreen";
 import { Provider } from "react-redux";
@@ -69,10 +70,12 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <PayPalScriptProvider deferLoading={true}>
-        <RouterProvider router={router} />
-      </PayPalScriptProvider>
-    </Provider>
+    <HelmetProvider>
+      <Provider store={store}>
+        <PayPalScriptProvider deferLoading={true}>
+          <RouterProvider router={router} />
+        </PayPalScriptProvider>
+      </Provider>
+    </HelmetProvider>
   </React.StrictMode>,
 );
