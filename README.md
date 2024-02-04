@@ -20,7 +20,7 @@ This is a basic MERN (MongoDB, Express, React, Node.js) stack app that allows us
 
 ## Usage
 
-To use the app, simply navigate to [http://localhost:51730](http://localhost:5173) in your web browser. You can create, read, update, and delete items using the interface provided.
+To use the app, simply navigate to [http://localhost:5173](http://localhost:5173) in your web browser. You can create, read, update, and delete items using the interface provided.
 
 ## Contributing
 
