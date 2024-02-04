@@ -16,11 +16,11 @@ This is a basic MERN (MongoDB, Express, React, Node.js) stack app that allows us
 4. Start the server:
 
 
-5. Open a web browser and navigate to [http://localhost:3000](http://localhost:3000).
+5. Open a web browser and navigate to [http://localhost:5173](http://localhost:5173).
 
 ## Usage
 
-To use the app, simply navigate to [http://localhost:3000](http://localhost:3000) in your web browser. You can create, read, update, and delete items using the interface provided.
+To use the app, simply navigate to [http://localhost:51730](http://localhost:5173) in your web browser. You can create, read, update, and delete items using the interface provided.
 
 ## Contributing
 
